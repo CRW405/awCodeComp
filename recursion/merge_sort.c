@@ -2,6 +2,12 @@
 #include <stdlib.h>
 #include <time.h>
 
+/* 
+	* compiled via gcc for linux
+	* `./sort` -> unsorted arr of size 10 then its sorted version
+	* './sort <n>' -> unsorted arr of size n then its sorted version
+*/
+
 void merge(int arr[], int start, int mid, int end) {
 	int i, j, k;
 	int leftSize = mid - start + 1;
@@ -19,7 +25,6 @@ void merge(int arr[], int start, int mid, int end) {
 	i = 0;
 	j = 0;
 	k = start;
-	
 	// zipper merge and order
 	while (i < leftSize && j < rightSize) {
 		if (leftArr[i] <= rightArr[j]) {

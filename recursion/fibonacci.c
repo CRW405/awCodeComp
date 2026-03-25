@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/* 
+	* compiled via gcc for linux
+	* `./fibonacci` -> prints first 10 Fibonacci numbers
+	* './fibonacci <n>' -> prints first n Fibonacci numbers
+	* can handle very large positive integers
+*/
+
 int fibonacci(int n, int i, unsigned long long cur, unsigned long long prev) {
 	printf("%llu, ", cur);
 	if (i < n) {
