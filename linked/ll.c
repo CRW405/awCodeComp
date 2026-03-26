@@ -139,6 +139,33 @@ char *toString(Node *node) {
 	return buffer;
 }
 
+void insertArr(int index, char *arr[], int arrLength, Node *node) {
+	//printf("insertArr()");
+	Node *prev = at(index, node);
+	Node *next = prev->next;
+	Node *new;
+
+	for (int i = 0; i < arrLength; i++) {
+		new = newNode(arr[i]);
+		prev->next = new;
+		new->prev = prev;
+		prev = new;
+	}
+	new->next = next;
+}
+
+void removeAt(int index, Node *node) {
+	//printf("removeAt()");
+	Node *remove = at(index, node);
+	Node *prev = remove->prev;
+	Node *next = remove->next;
+
+	prev->next = next;
+	next->prev = prev;
+	
+	free(remove);
+}
+
 int main(int argc, char *argv[])
 {
 	printf("=== LinkedList Demo ===\n\n");
@@ -181,6 +208,17 @@ int main(int argc, char *argv[])
 	printf("Popped: %s\n", popped);
 	printf("List after pop: %s\n", toString(list));
 	printf("New size: %d\n\n", size(list));
+
+	printf("8. Bonus: Inserting array at index:\n");
+	char *inserts[] = {"insert1", "insert2", "insert3"};
+	int insertsLength = sizeof(inserts) / sizeof(inserts[0]);
+	insertArr(1, inserts, insertsLength, list);
+	printf("List after inserting array at index 1: %s\n\n", toString(list));
+
+	printf("9. Bonus: Removing node at index\n");
+	removeAt(2, list);
+	removeAt(2, list);
+	printf("List after removing node at index 2 twice: %s\n", toString(list));
 
 	return EXIT_SUCCESS;
 }
