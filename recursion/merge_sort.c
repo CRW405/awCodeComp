@@ -70,11 +70,11 @@ int main(int argc, char *argv[])
 	int arr[n];
 	srand(time(NULL));
 
-	printf("%s\n", "unsorted");
 	for (int i = 0; i < n; i++) {
 		arr[i] = rand() % (n+1);
 	}
 
+	printf("%s\n", "unsorted");
 	for (int i = 0; i < n; i++) {
 		printf("%d, ", arr[i]);
 	}
