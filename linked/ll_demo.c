@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ll.h"
 
 typedef struct Node {
 	char content[256];
@@ -167,61 +166,61 @@ void removeAt(int index, Node *node) {
 	free(remove);
 }
 
-// int main(int argc, char *argv[])
-// {
-// 	printf("=== LinkedList Demo ===\n\n");
-//
-// 	printf("1. Creating list and appending values:\n");
-// 	Node *list = newNode("First");
-// 	appendNode(list, newNode("Second"));
-// 	appendNode(list, newNode("Third"));
-// 	printf("List: %s\n", toString(list));
-// 	printf("Size: %d\n\n", size(list));
-//
-// 	printf("2. Prepending a value:\n");
-// 	prependNode(list, newNode("Zero"));
-// 	printf("List after prepend: %s\n", toString(list));
-// 	printf("Size: %d\n\n", size(list));
-//
-// 	printf("3. Getting head and tail:\n");
-// 	printf("Head: %s\n", head(list)->content);
-// 	printf("Tail: %s\n", tail(list)->content);
-// 	printf("Size: %d\n\n", size(list));
-//
-// 	printf("4. Accessing element at index:\n");
-// 	printf("Element at index 0: %s\n", at(0, list)->content);
-// 	printf("Element at index 2: %s\n", at(2, list)->content);
-// 	printf("Element at index 3: %s\n\n", at(3, list)->content);
-//
-// 	printf("5. Checking contains():\n");
-// 	printf("Contains 'Second': %s\n", contains(list, "Second") ? "true" : "false");
-// 	printf("Contains 'Nonexistent': %s\n\n", contains(list, "Nonexistent") ? "true" : "false");
-//
-// 	printf("6. Finding index of value:\n");
-// 	printf("Index of 'First': %d\n", findIndex(list, "First"));
-// 	printf("Index of 'Third': %d\n", findIndex(list, "Third"));
-// 	printf("Index of 'Missing': %d\n\n", findIndex(list, "Missing"));
-//
-// 	printf("7. Popping head:\n");
-// 	char popped[256];
-// 	pop(popped, list);
-// 	list = list->next;
-// 	printf("Popped: %s\n", popped);
-// 	printf("List after pop: %s\n", toString(list));
-// 	printf("New size: %d\n\n", size(list));
-//
-// 	printf("8. Bonus: Inserting array at index:\n");
-// 	char *inserts[] = {"insert1", "insert2", "insert3"};
-// 	int insertsLength = sizeof(inserts) / sizeof(inserts[0]);
-// 	insertArr(1, inserts, insertsLength, list);
-// 	printf("List after inserting array at index 1: %s\n\n", toString(list));
-//
-// 	printf("9. Bonus: Removing node at index\n");
-// 	removeAt(2, list);
-// 	removeAt(2, list);
-// 	printf("List after removing node at index 2 twice: %s\n", toString(list));
-//
-// 	return EXIT_SUCCESS;
-// }
+int main(int argc, char *argv[])
+{
+	printf("=== LinkedList Demo ===\n\n");
+	
+	printf("1. Creating list and appending values:\n");
+	Node *list = newNode("First");
+	appendNode(list, newNode("Second"));
+	appendNode(list, newNode("Third"));
+	printf("List: %s\n", toString(list));
+	printf("Size: %d\n\n", size(list));
+	
+	printf("2. Prepending a value:\n");
+	prependNode(list, newNode("Zero"));
+	printf("List after prepend: %s\n", toString(list));
+	printf("Size: %d\n\n", size(list));
+	
+	printf("3. Getting head and tail:\n");
+	printf("Head: %s\n", head(list)->content);
+	printf("Tail: %s\n", tail(list)->content);
+	printf("Size: %d\n\n", size(list));
+	
+	printf("4. Accessing element at index:\n");
+	printf("Element at index 0: %s\n", at(0, list)->content);
+	printf("Element at index 2: %s\n", at(2, list)->content);
+	printf("Element at index 3: %s\n\n", at(3, list)->content);
+	
+	printf("5. Checking contains():\n");
+	printf("Contains 'Second': %s\n", contains(list, "Second") ? "true" : "false");
+	printf("Contains 'Nonexistent': %s\n\n", contains(list, "Nonexistent") ? "true" : "false");
+	
+	printf("6. Finding index of value:\n");
+	printf("Index of 'First': %d\n", findIndex(list, "First"));
+	printf("Index of 'Third': %d\n", findIndex(list, "Third"));
+	printf("Index of 'Missing': %d\n\n", findIndex(list, "Missing"));
+	
+	printf("7. Popping head:\n");
+	char popped[256];
+	pop(popped, list);
+	list = list->next;
+	printf("Popped: %s\n", popped);
+	printf("List after pop: %s\n", toString(list));
+	printf("New size: %d\n\n", size(list));
+
+	printf("8. Bonus: Inserting array at index:\n");
+	char *inserts[] = {"insert1", "insert2", "insert3"};
+	int insertsLength = sizeof(inserts) / sizeof(inserts[0]);
+	insertArr(1, inserts, insertsLength, list);
+	printf("List after inserting array at index 1: %s\n\n", toString(list));
+
+	printf("9. Bonus: Removing node at index\n");
+	removeAt(2, list);
+	removeAt(2, list);
+	printf("List after removing node at index 2 twice: %s\n", toString(list));
+
+	return EXIT_SUCCESS;
+}
 
 
