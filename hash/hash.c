@@ -2,28 +2,95 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ll.h" // compile with ll.c
+#include "ll.h"
 
 #define PRIME 3
 
-unsigned hashcode(char str[]) {
+unsigned hashcode(char *str) {
 	unsigned code = 0;
 
 	for (int i = 0; i < strlen(str); i++) {
-		code = (PRIME * code) + (str[i] - '0');
+		code = ((PRIME * code) + (str[i] - '0'));
 	}
 	return code;
 }
 
+Node *newHashMap(int size) {
+    Node *hashMap = (Node*)malloc(size * sizeof(Node));
+    for (int i = 0; i < size; i++) {
+        hashMap[i] = NULL;
+    }
+    return hashMap;
+}
+
+void put(char key[], char val[], Node hashMap[]) {
+    unsigned hash = hashcode(key);
+    int index = hash % (sizeof(hashMap) / sizeof(hashMap[0]));
+
+    char pair[] = {key, val}
+    Node *bucket = hashMap[index];
+    Node *entry = newNode(val);
+
+    if (bucket == NULL) {
+        bucket = entry;
+    } else if (!contains(bucket, val)) {
+        appendNode(bucket, newNode(pair));
+    } else {
+        return;
+    }
+}
+
+char get(char key[], Node hashMap[]) {
+    unsigned hash = hashcode(key);
+    int index = hash % (sizeof(hashMap) / sizeof(hashMap[0]));
+    
+    Node *bucket = hashMap[index];
+
+    if (bucket == NULL) {
+        return;
+    } else {
+        Node *pNext = bucket;
+        while (pNext != NULL) {
+            if (strcmp(pNext->content, key) == 0) {
+                return pNext->content;
+            }
+            pNext = pNext->pNext;
+        }
+    }
+}
+
+void remove(char key[], Node hashMap[]) {
+    unsigned hash = hashcode(key);
+    int index = hash % (sizeof(hashMap) / sizeof(hashMap[0]));
+    
+    Node *bucket = hashMap[index];
+
+    if (bucket == NULL) {
+        return;
+    } else {
+        Node *pNext = bucket;
+        while (pNext != NULL) {
+            if (strcmp(pNext->content, key) == 0) {
+                removeAt(findIndex(bucket, key), bucket);
+                return;
+            }
+            pNext = pNext->pNext;
+        }
+    }
+}
+
 int main(int argc, char *argv[])
 {
-	char text[] = "Hello World";
-	printf("%s: %u\n", text, hashcode(text));
-	char text1[] = "World Hello";
-	printf("%s: %u\n", text1, hashcode(text1));
-	char text2[] = "Goodbye Space";
-	printf("%s: %u\n", text2, hashcode(text2));
-	char excerpt[] = "One of the most used data structures across programming languages is a hash table, aka hash map. A hash map is similar to a conventional array, except it uses “keys” as indices rather than meaningless sequential numbering of the values. With the data organized in this way, we get quick search speeds for keys in the structure. If you’ve worked with JavaScript Object Literals ({}), Set, or Map, then you have used structures based on hash tables. But how do they work internally? How can we save key value pairs and later retrieve them?";
-	printf("excerpt: %u\n", hashcode(excerpt));
-	return EXIT_SUCCESS;
+    printf("=== HASHMAP DEMO ===\n");
+    printf("Hashcode for 'hello': %u\n", hashcode("hello"));
+    printf("creation and putting\n");
+    int size = 10;
+    Node pHashMap[size] = newHashMap(size);
+    put("hello", "world", pHashMap);
+    put("foo", "bar", pHashMap);
+    printf("getting\n");
+    printf("Value for 'hello': %s\n", get("hello", pHashMap));
+    printf("Value for 'foo': %s\n", get("foo", pHashMap));
+    // printf("removing\n");
+    return EXIT_SUCCESS;
 }

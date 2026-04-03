@@ -2,226 +2,152 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ll.h"
 
 typedef struct Node {
 	char content[256];
-	struct Node *next;
-	struct Node *prev;
+	struct Node *pNext;
+	struct Node *pPrev;
 } Node;
 
-Node* newNode(char content[]) {
-	// printf("%s\n", "newNode()");
-	Node* new = (Node*)malloc(sizeof(Node));
+Node* pNewNode(char content[]) {
+	Node* pNew = (Node*)malloc(sizeof(Node));
 	
-	strcpy(new->content, content);
-	new->next = NULL;
-	new->prev = NULL;
-	return new;
+	strcpy(pNew->content, content);
+	pNew->pNext = NULL;
+	pNew->pPrev = NULL;
+	return pNew;
 }
 
-void insertNode(Node *prev, Node *new, Node *next) {
-	// printf("%s\n", "insertNode()");
-	prev->next = new;
-	new->prev = prev;
-	if (next != NULL) {
-		new->next = next;
-		next->prev = new;
+void insertNode(Node *pPrev, Node *pNew, Node *pNext) {
+	pPrev->pNext = pNew;
+	pNew->pPrev = pPrev;
+	if (pNext != NULL) {
+		pNew->pNext = pNext;
+		pNext->pPrev = pNew;
 	}
 }
 
-void appendNode(Node *head, Node *new) {
-	// printf("%s\n", "appendNode()");
-	Node *next = head;
-	while (next->next != NULL) {
-		next = next->next;
+void appendNode(Node *head, Node *pNew) {
+	Node *pNext = pHead;
+	while (pNext->pNext != NULL) {
+		pNext = pNext->pNext;
 	}
-	insertNode(next, new, NULL);
+	insertNode(pNext, pNew, NULL);
 }
 
-void prependNode(Node *head, Node *new) {
-	// printf("%s\n", "prependNode()");
-	Node *first = head;
-	while (first->prev != NULL) {
-		first = first->prev;
+void prependNode(Node *pHead, Node *pNew) {
+	Node *first = pHead;
+	while (first->pPrev != NULL) {
+		first = first->pPrev;
 	}
-	new->next = first;
-	first->prev = new;
+	pNew->pNext = first;
+	first->pPrev = pNew;
 }
 
-Node* head(Node *node) {
-	// printf("%s\n", "head()");
-	Node *prev = node;
-	while (prev->prev != NULL) {
-		prev = prev->prev;
+Node* head(Node *pNode) {
+	Node *pPrev = pNode;
+	while (pPrev->pPrev != NULL) {
+		pPrev = pPrev->pPrev;
 	}
-	return prev;
+	return pPrev;
 }
 
-int size(Node *node) {
-	// printf("%s\n", "size()");
-	Node *next = head(node);
+int size(Node *pNode) {
+	Node *pNext = head(pNode);
 	int i = 1;
-	while (next->next != NULL) {
-		next = next->next;
+	while (pNext->pNext != NULL) {
+		pNext = pNext->pNext;
 		i++;
 	}
 	return i;
 }
 
-Node* tail(Node *node) {
-	// printf("%s\n", "tail()");
-	Node *next = node;
-	while (next->next != NULL) {
-		next = next->next;
+Node* tail(Node *pNode) {
+	Node *pNext = pNode;
+	while (pNext->pNext != NULL) {
+		pNext = pNext->pNext;
 	}
-	return next;
+	return pNext;
 }
 
-Node* at(int index, Node *node) {
-	// printf("%s\n", "at()");
+Node* at(int index, Node *pNode) {
 	int i = 0;
-	Node *current = head(node);
-	while (current != NULL && i < index) {
-		current = current->next;
+	Node *pCurrent = head(pNode);
+	while (pCurrent != NULL && i < index) {
+		pCurrent = pCurrent->pNext;
 		i++;
 	}
-	return current;
+	return pCurrent;
 }
 
-const char * pop(char* output, Node *node){
-	// printf("%s\n", "pop()");
-	Node *beginning = head(node);
-	Node *newHead = beginning->next;
-	strcpy(output, beginning->content);
-	newHead->prev = NULL;
-	free(beginning);
+const char * pop(char* output, Node *pNode){
+	Node *ppBeginning = head(pNode);
+	Node *pNewHead = pBeginning->pNext;
+	strcpy(output, pBeginning->content);
+	pNewHead->pPrev = NULL;
+	free(pBeginning);
 	return output;
 }
 
-bool contains(Node *head, char value[]) {
-	// printf("%s\n", "contains()");
-	Node *next = head;
-	while (next != NULL) {
-		if (strcmp(next->content, value) == 0) {
+bool contains(Node *pHead, char value[]) {
+	Node *pNext = pHead;
+	while (pNext != NULL) {
+		if (strcmp(pNext->content, value) == 0) {
 			return true;
 		}
-		next = next->next;
+		pNext = pNext->pNext;
 	}
 	return false;
 }
 
-int findIndex(Node *node, char value[]) {
-	// printf("%s\n", "findIndex()");
+int findIndex(Node *pNode, char value[]) {
 	int index = 0;
-	Node *next = head(node);
-	while (next != NULL) {
-		if (strcmp(next->content, value) == 0) {
+	Node *pNext = head(pNode);
+	while (pNext != NULL) {
+		if (strcmp(pNext->content, value) == 0) {
 			return index;
 		}
-		next = next->next;
+		pNext = pNext->pNext;
 		index++;
 	}
 
 	return -1;
 }
 
-char *toString(Node *node) {
-	// printf("%s\n", "toString()");
-	Node *beginning = head(node);
-	int len = size(beginning);
-	Node *next = beginning;
+char *toString(Node *pNode) {
+	Node *pBeginning = head(pNode);
+	int len = size(pBeginning);
+	Node *pNext = pBeginning;
 	char *buffer = "";
-	while (next->next != NULL) {
-		asprintf(&buffer, "%s(%s) -> ", buffer, next->content);
-		next = next->next;
+	while (pNext->pNext != NULL) {
+		asprintf(&buffer, "%s(%s) -> ", buffer, pNext->content);
+		pNext = pNext->pNext;
 	}
-	asprintf(&buffer, "%s(%s) -> NULL", buffer, next->content);
+	asprintf(&buffer, "%s(%s) -> NULL", buffer, pNext->content);
 	return buffer;
 }
 
-void insertArr(int index, char *arr[], int arrLength, Node *node) {
-	//printf("insertArr()");
-	Node *prev = at(index, node);
-	Node *next = prev->next;
-	Node *new;
+void insertArr(int index, char *arr[], int arrLength, Node *pNode) {
+	Node *pPrev = at(index, pNode);
+	Node *pNext = pPrev->pNext;
+	Node *pNew;
 
 	for (int i = 0; i < arrLength; i++) {
-		new = newNode(arr[i]);
-		prev->next = new;
-		new->prev = prev;
-		prev = new;
+		pNew = pNewNode(arr[i]);
+		pPrev->pNext = pNew;
+		pNew->pPrev = pPrev;
+		pPrev = pNew;
 	}
-	new->next = next;
+	pNew->pNext = pNext;
 }
 
-void removeAt(int index, Node *node) {
-	//printf("removeAt()");
-	Node *remove = at(index, node);
-	Node *prev = remove->prev;
-	Node *next = remove->next;
+void removeAt(int index, Node *pNode) {
+	Node *remove = at(index, pNode);
+	Node *pPrev = remove->pPrev;
+	Node *pNext = remove->pNext;
 
-	prev->next = next;
-	next->prev = prev;
+	pPrev->pNext = pNext;
+	pNext->pPrev = pPrev;
 	
 	free(remove);
 }
-
-// int main(int argc, char *argv[])
-// {
-// 	printf("=== LinkedList Demo ===\n\n");
-//
-// 	printf("1. Creating list and appending values:\n");
-// 	Node *list = newNode("First");
-// 	appendNode(list, newNode("Second"));
-// 	appendNode(list, newNode("Third"));
-// 	printf("List: %s\n", toString(list));
-// 	printf("Size: %d\n\n", size(list));
-//
-// 	printf("2. Prepending a value:\n");
-// 	prependNode(list, newNode("Zero"));
-// 	printf("List after prepend: %s\n", toString(list));
-// 	printf("Size: %d\n\n", size(list));
-//
-// 	printf("3. Getting head and tail:\n");
-// 	printf("Head: %s\n", head(list)->content);
-// 	printf("Tail: %s\n", tail(list)->content);
-// 	printf("Size: %d\n\n", size(list));
-//
-// 	printf("4. Accessing element at index:\n");
-// 	printf("Element at index 0: %s\n", at(0, list)->content);
-// 	printf("Element at index 2: %s\n", at(2, list)->content);
-// 	printf("Element at index 3: %s\n\n", at(3, list)->content);
-//
-// 	printf("5. Checking contains():\n");
-// 	printf("Contains 'Second': %s\n", contains(list, "Second") ? "true" : "false");
-// 	printf("Contains 'Nonexistent': %s\n\n", contains(list, "Nonexistent") ? "true" : "false");
-//
-// 	printf("6. Finding index of value:\n");
-// 	printf("Index of 'First': %d\n", findIndex(list, "First"));
-// 	printf("Index of 'Third': %d\n", findIndex(list, "Third"));
-// 	printf("Index of 'Missing': %d\n\n", findIndex(list, "Missing"));
-//
-// 	printf("7. Popping head:\n");
-// 	char popped[256];
-// 	pop(popped, list);
-// 	list = list->next;
-// 	printf("Popped: %s\n", popped);
-// 	printf("List after pop: %s\n", toString(list));
-// 	printf("New size: %d\n\n", size(list));
-//
-// 	printf("8. Bonus: Inserting array at index:\n");
-// 	char *inserts[] = {"insert1", "insert2", "insert3"};
-// 	int insertsLength = sizeof(inserts) / sizeof(inserts[0]);
-// 	insertArr(1, inserts, insertsLength, list);
-// 	printf("List after inserting array at index 1: %s\n\n", toString(list));
-//
-// 	printf("9. Bonus: Removing node at index\n");
-// 	removeAt(2, list);
-// 	removeAt(2, list);
-// 	printf("List after removing node at index 2 twice: %s\n", toString(list));
-//
-// 	return EXIT_SUCCESS;
-// }
-
-
