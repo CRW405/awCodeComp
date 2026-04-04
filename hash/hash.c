@@ -2,9 +2,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ll.h"
 
-#define PRIME 3
+#define PRIME 7
+
+// nodes for linked lists
+typedef struct Node{
+    char *key;
+    char *val;
+    struct Node *next;
+} Node;
+
+// main array of ll's
+typedef struct HashTable{
+    Node **arr;
+    int size;
+} HashTable;
 
 unsigned hashcode(char *str) {
 	unsigned code = 0;
@@ -15,82 +27,47 @@ unsigned hashcode(char *str) {
 	return code;
 }
 
-Node *newHashMap(int size) {
-    Node *hashMap = (Node*)malloc(size * sizeof(Node));
+HashTable * newTable(int size) {
+    HashTable *table = malloc(sizeof(HashTable));
+    table->arr = malloc(sizeof(Node) * size);
+    table->size = size;
+
     for (int i = 0; i < size; i++) {
-        hashMap[i] = NULL;
+        table->arr[i] = NULL;
     }
-    return hashMap;
+    return table;
 }
 
-void put(char key[], char val[], Node hashMap[]) {
-    unsigned hash = hashcode(key);
-    int index = hash % (sizeof(hashMap) / sizeof(hashMap[0]));
-
-    char pair[] = {key, val}
-    Node *bucket = hashMap[index];
-    Node *entry = newNode(val);
-
-    if (bucket == NULL) {
-        bucket = entry;
-    } else if (!contains(bucket, val)) {
-        appendNode(bucket, newNode(pair));
-    } else {
-        return;
-    }
+Node * newNode(char *key, char *val) {
+    Node *node = malloc(sizeof(Node));
+    node->key = strdup(key);
+    node->val = strdup(val);
+    node->next = NULL;
+    return node;
 }
 
-char get(char key[], Node hashMap[]) {
-    unsigned hash = hashcode(key);
-    int index = hash % (sizeof(hashMap) / sizeof(hashMap[0]));
-    
-    Node *bucket = hashMap[index];
+void set(HashTable *table, char *key, char *val) {
+    unsigned index = hashcode(key) % table->size;
+    Node *cur = table->arr[index];
 
-    if (bucket == NULL) {
-        return;
-    } else {
-        Node *pNext = bucket;
-        while (pNext != NULL) {
-            if (strcmp(pNext->content, key) == 0) {
-                return pNext->content;
-            }
-            pNext = pNext->pNext;
+    while (cur != NULL) {
+        if (strcmp(cur->key, key) == 0) {
+            cur->val = val;
+            return;
         }
+        cur = cur->next;
     }
+
+    Node *new = newNode(key, val);
+    new->next = table->arr[index];
+    table->arr[index] = new;
 }
 
-void remove(char key[], Node hashMap[]) {
-    unsigned hash = hashcode(key);
-    int index = hash % (sizeof(hashMap) / sizeof(hashMap[0]));
-    
-    Node *bucket = hashMap[index];
+// get
 
-    if (bucket == NULL) {
-        return;
-    } else {
-        Node *pNext = bucket;
-        while (pNext != NULL) {
-            if (strcmp(pNext->content, key) == 0) {
-                removeAt(findIndex(bucket, key), bucket);
-                return;
-            }
-            pNext = pNext->pNext;
-        }
-    }
-}
+// remove
 
 int main(int argc, char *argv[])
 {
-    printf("=== HASHMAP DEMO ===\n");
-    printf("Hashcode for 'hello': %u\n", hashcode("hello"));
-    printf("creation and putting\n");
-    int size = 10;
-    Node pHashMap[size] = newHashMap(size);
-    put("hello", "world", pHashMap);
-    put("foo", "bar", pHashMap);
-    printf("getting\n");
-    printf("Value for 'hello': %s\n", get("hello", pHashMap));
-    printf("Value for 'foo': %s\n", get("foo", pHashMap));
-    // printf("removing\n");
     return EXIT_SUCCESS;
 }
